@@ -1,0 +1,690 @@
+﻿Summary,Issue key,Issue id,Issue Type,Status,Project key,Project name,Project type,Project lead,Project lead id,Project description,Priority,Resolution,Assignee,Assignee Id,Reporter,Reporter Id,Creator,Creator Id,Created,Updated,Last Viewed,Resolved,Due date,Votes,Description,Environment,Watchers,Watchers Id,Original estimate,Remaining Estimate,Time Spent,Work Ratio,Σ Original Estimate,Σ Remaining Estimate,Σ Time Spent,Security Level,Attachment,Attachment,Custom field (Actual end),Custom field (Actual start),Custom field (Approvals),Custom field (Change reason),Custom field (Change risk),Custom field (Change type),Custom field (Development),Custom field (Epic Color),Custom field (Epic Name),Custom field (Epic Status),Custom field (Focus Areas),Custom field (Goals),Custom field (Impact),Custom field (Incident manager),Custom field (Issue colour),Custom field (Locked forms),Custom field (Open forms),Custom field (Project overview key),Custom field (Project overview status),Custom field (Rank),Custom field (Request Type),Custom field (Sentiment),Custom field (Start date),Custom field (Story Points),Custom field (Story point estimate),Custom field (Submitted forms),Custom field (Target end),Custom field (Target start),Custom field (Team),Custom field (Total forms),Custom field (Vulnerability),Custom field (Vulnerability),Custom field (Work item created forms),Custom field ([CHART] Date of First Response),Custom field ([CHART] Time in Status),Status Category,Status Category Changed
+Financial Loss: Itinerary renders 0-day stays at a broken flat subtotal rate of $11 instead of enforcing the 1-night base room rate minimum,AHA-16,10106,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Highest,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:33 PM,28/Sep/26 2:00 PM,28/Sep/26 12:33 PM,,,0,"Status: Failed
+
+Description:
+Severe revenue leak. Processing invalid 0-day transaction loops carries zeroed out multiplication counts over into live database columns.
+
+Steps to Reproduce:
+1. Complete an order pass using duplicate check-in/checkout parameters to generate a 0-day length placeholder record
+2. Load up the Booked Itinerary row data summaries table grid
+3. Inspect the active columns for Order ID: W608267U4F
+
+Expected Result:
+The system should filter out 0-day stay parameters completely, or enforce an automatic 1-night base charge floor constraint ($125 + GST minimum) to prevent business losses.
+
+Actual Result:
+The data ledger grid outputs 0 Days stay durations accompanied by a final broken charge text reading exactly $11.
+
+!image-20260928-023320.png|width=545,alt=""image-20260928-023320.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:33 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-023320.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10095,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i00096:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:33 PM
+"Business Logic Failure: System accepts identical check-in/checkout dates, creating 0-day stays with an illegal $11 pricing fee",AHA-12,10102,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Highest,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:24 PM,28/Sep/26 2:00 PM,28/Sep/26 12:24 PM,,,0,"Status: Failed
+
+Description:
+Severe scheduling validation failure. Setting equal arrival and departure checkpoints forces core calculations down to negative or broken integers.
+
+Steps to Reproduce:
+1. Configure identical calendar choices inside both the check-in and checkout entry selectors ('08/05/2026')
+2. Execute searches and navigate through checkout sheets to the final payment steps
+3. Observe the calculated billing sums printed on the confirmation receipt ledger
+
+Expected Result:
+The scheduler engine must intercept duplicate timeline requests early, halting inputs with a clear error: ""Check-In Date shall be before Check-Out Date.""
+
+Actual Result:
+The checkout routine finishes without restriction for a 0-day stay duration. It discards the hotel's nightly base charge ($125) and outputs an illegal flat billing fee of $11.
+
+!image-20260928-022442.png|width=246,alt=""image-20260928-022442.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:24 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-022442.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10090,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0008a:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:24 PM
+Security Vulnerability: Injecting special character strings into name fields leaks raw database SQL query syntax errors to the UI,AHA-11,10101,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Highest,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:23 PM,28/Sep/26 2:00 PM,28/Sep/26 12:23 PM,,,0,"Status: Failed
+
+Description:
+Severe SQL injection vulnerability risk. Data entries fields lack standard structural string sanitisation routines, leaking backend logic directly onto user interfaces.
+
+Steps to Reproduce:
+1. Navigate to the personal checkout detail inputs inside the booking form module
+2. Type structural special programming script symbols directly inside the First or Last Name entries ( ';., '; )
+3. Submit booking forms using valid billing configurations
+
+Expected Result:
+The system should sanitize input characters safely, pass them as basic string objects, or surface a clean generic validation block.
+
+Actual Result:
+The system crashes unhandled, exposing a raw database connection error directly in user layouts: ""You have an error in your SQL syntax query"".
+
+!image-20260928-022320.png|width=565,alt=""image-20260928-022320.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:23 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-022320.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10089,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i00082:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:23 PM
+Payment gateway allows reservation bookings using credit cards with expired historical dates (2023),AHA-10,10100,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Highest,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:21 PM,28/Sep/26 2:00 PM,28/Sep/26 12:21 PM,,,0,"Status: Failed
+
+Description:
+Critical billing business logic boundary bypass. Card validation components neglect to compare card expiration dates against current system times.
+
+Steps to Reproduce:
+1. Access payment fields inside the booking module
+2. Input a valid card number format and valid 3-digit CVV sequence
+3. Select an expired historical year option from the expiration calendar list picker ('2023')
+4. Submit the transaction execution call
+
+Expected Result:
+The banking gateway module must reject processing, stop transaction execution, and issue a ""Card has expired"" code response error.
+
+Actual Result:
+The transaction finishes successfully. The system fails to evaluate dates and processes the booking with the expired card.
+
+!image-20260928-022129.png|width=213,alt=""image-20260928-022129.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:21 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-022129.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10088,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0007u:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:21 PM
+Security Bypass: Checkout gateway permits payment execution utilizing invalid 1-digit CVV entries,AHA-9,10099,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Highest,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:19 PM,28/Sep/26 1:57 PM,28/Sep/26 1:57 PM,,,0,"Status: Failed
+
+Description:
+Critical payment gateway bypass field restriction. The input validation layers fail to flag and block broken bank card metadata.
+
+Steps to Reproduce:
+1. Open the checkout booking layout screen
+2. Enter valid card number blocks alongside future chronological expiration dates
+3. Type an invalid, single-digit numeric integer into the CVV block ('5')
+4. Click the 'Book Now' / checkout payment confirmation button
+
+Expected Result:
+The security gateway layer must immediately catch the field parameter mismatch, block checkout, and throw an ""Invalid CVV length"" warning.
+
+Actual Result:
+The transaction processes successfully. The system bypasses security parameters and logs a confirmed reservation booking.
+
+!image-20260928-021955.png|width=203,alt=""image-20260928-021955.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:19 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-021955.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10087,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0007m:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:19 PM
+[LT-SEC] Trips routing panel completely breaks and hides submission UI when SQL injection payload (' OR 1=1--) is injected,LT-5,10016,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Highest,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,26/Aug/26 10:54 AM,26/Aug/26 10:55 AM,26/Aug/26 10:55 AM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+* *Browser:* Google Chrome (Latest Version)
+
+h3. Prerequisites
+
+* User is on the Trips routing drawer interface.
+
+h3. Steps to Reproduce
+
+# Open the 'Trips / Plan Journey' routing panel drawer.
+# Click inside the 'Origin' text field and paste the SQL payload: ' OR 1=1--
+# Click inside the 'Destination' text field and paste the identical payload: ' OR 1=1--
+# Blur focus from the input fields and check for routing submission elements.
+
+h3. Expected Result
+
+The application securely handles the string payload. It displays an inline validation error message (e.g., ""Invalid location selected"") and retains functional submission controls.
+
+h3. Actual Result
+
+The application layout breaks down entirely. No validation warnings are rendered, and all submission buttons (""Get Directions"" / ""Calculate Route"") are completely stripped from the UI layout.
+
+h3. Impact / Severity
+
+* *Severity:* High / Critical (Security Vulnerability / SQLi Leak Risk)
+* *Priority:* Highest
+!image-20260826-005418.png|width=703,alt=""image-20260826-005418.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,26/Aug/26 10:54 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260826-005418.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10004,,,,ApprovalsCFValue{approvals=[]},,,,{},ghx-label-14,,,,,,,dark_orange,,,,,0|i0003j:,,,,,,,,,,,,,,,,To Do,26/Aug/26 10:54 AM
+"Billing Engine Arithmetic Error: Multi-room itinerary total registers an invalid $314 charge instead of the true $1,815 calculation summary",AHA-18,10108,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,High,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:38 PM,28/Sep/26 2:01 PM,28/Sep/26 12:38 PM,,,0,"Status: Failed
+
+Description:
+Critical core arithmetic billing algorithm logic failure. Totals rendered onto transaction histories completely break multiplier relationships across quantity columns.
+
+Steps to Reproduce:
+1. Locate a tracking ledger entry row corresponding to a 6-room selection reservation stay count configuration
+2. Process calculations using baseline system criteria settings: (Price per Night * Quantity of Rooms * Stay Duration) + 10% GST
+3. Compare manual mathematical parameters against the literal 'Total Price' string rendered on screen
+
+Expected Result:
+The calculation output must calculate arithmetic parameters accurately, rendering the true subtotal and tax sum ($1,815 total charge summary).
+
+Actual Result:
+The itinerary table prints an invalid flat charge line reading AUD $314, entirely dropping volume calculation logic vectors from active code loops.
+
+!image-20260928-023814.png|width=546,alt=""image-20260928-023814.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:38 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-023814.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10097,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0009m:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:38 PM
+Itinerary ledger ignores room count variations and bills a 5-room booking at a single-room subtotal cost,AHA-15,10105,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,High,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:31 PM,28/Sep/26 2:00 PM,28/Sep/26 12:31 PM,,,0,"Status: Failed
+
+Description:
+Critical calculation error inside the summary itinerary database arrays. High-volume room allocations pull flat single-unit cost values.
+
+Steps to Reproduce:
+1. Place a reservation booking specifying 1 room allocation unit for 1 day
+2. Place a separate reservation booking using matching options but scaling room configurations up to a 5-room bundle request
+3. Navigate onto the Booked Itinerary management interface ledger and contrast the calculated subtotal pricing records side-by-side
+
+Expected Result:
+Total charges must accurately multiply across quantity markers ($350 base rate * 5 rooms * 1 day = $1750, plus 10% GST = $1925 final total).
+
+Actual Result:
+The subtotal charge column for both the single room layout and the 5-room selection display identical pricing logs, completely dropping room count volume metrics from the math.
+
+!image-20260928-023120.png|width=555,alt=""image-20260928-023120.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:31 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-023120.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10094,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0008y:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:31 PM
+Calendar constraints violation allows users to confirm room bookings for historical past timelines,AHA-13,10103,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,High,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:26 PM,28/Sep/26 2:00 PM,28/Sep/26 12:26 PM,,,0,"Status: Failed
+
+Description:
+Chronological logic bypass bug. Booking processing modules permit scheduling reservations for timelines that exist in the past relative to active clock loops.
+
+Steps to Reproduce:
+1. Access the hotel search form (current execution system time is past May 8, 2026)
+2. Manipulate arrival and departure input blocks to target closed historical dates ('01/05/2026' to '05/05/2026')
+3. Complete user metadata fields and select room checkout execution paths
+
+Expected Result:
+The system must block past-date booking queries and issue a hard validation block error: ""Dates cannot be in the past"".
+
+Actual Result:
+The past timeline query passes verification. The app issues a live tracking order confirmation ID receipt for dates that have already occurred.
+
+!image-20260928-022630.png|width=178,alt=""image-20260928-022630.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:26 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-022630.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10091,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0008i:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:26 PM
+[LT-UI-RESP] Sidebar panel fails to collapse into hamburger menu causing overlapping text and routing layout clipping on narrow viewports,LT-15,10058,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,High,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,07/Sep/26 5:09 PM,07/Sep/26 5:10 PM,08/Sep/26 5:03 PM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Viewport Setup:* Mobile / Narrow Desktop Width Simulator
+
+h3. Steps to Reproduce
+
+# Load the Live Traffic NSW application homepage.
+# Narrow the window frame or toggle a mobile device layout viewport configuration.
+# Generate a multi-route trip setup to trigger alternative route map popup windows.
+# Observe the navigation sidebar container and map overlays.
+
+h3. Expected Result
+
+The site adapts seamlessly to smaller screen widths. The left navigation panel collapses automatically into a clean 'hamburger' icon menu button, and map route cards render with proper spacing without overlapping.
+
+h3. Actual Result
+
+The left navigation menu panel fails to collapse automatically and remains fully locked open. This squashes the map canvas, causing multiple route summary cards (e.g., 33 mins / 34 mins options) to stack, overlap, and clip text content parameters directly.
+
+h3. Impact / Severity
+
+* *Severity:* High (Core UI Layout Breakdown / Missing Responsive Breakpoint)
+* *Priority:* High
+* !image-20260907-071004.png|width=557,alt=""image-20260907-071004.png""!
+",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,07/Sep/26 5:10 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260907-071004.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10046,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0005r:,,,,,,,,,,,,,,,,To Do,07/Sep/26 5:09 PM
+[LT-UI-MAP] Live Traffic map renders yellow roadwork pin instead of red incident icon during major closures,LT-2,10013,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,High,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,26/Aug/26 10:15 AM,26/Aug/26 10:41 AM,26/Aug/26 10:40 AM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+* *Browser:* Google Chrome (Latest Version)
+
+h3. Prerequisites
+
+* Live traffic data layer must contain an active incident at Victoria Pass (Great Western Highway).
+
+h3. Steps to Reproduce
+
+# Navigate to the Live Traffic NSW website.
+# Locate the active road hazard segment at Mount Victoria / Victoria Pass.
+# Observe the layout icon element for the active incident pin.
+# Click on the pin layout to display the slide-out panel drawer UI context.
+
+h3. Expected Result
+
+The system should render a standard Red Incident Marker Pin Icon. Clicking the pin should display a dynamic side drawer displaying volatile regional traffic alerts.
+
+h3. Actual Result
+
+The map layer renders a Yellow Emergency Roadwork Warning Triangle Pin. The side panel displays long-term infrastructure structural failure context (""Highway closed in both directions"") instead of standard volatile incident handling metrics.
+
+h3. Impact / Severity
+
+* *Severity:* Medium (UI Mismatch / Element Mapping Issue)
+* *Priority:* Medium
+!image-20260826-001947.png|width=557,alt=""image-20260826-001947.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,26/Aug/26 10:20 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260826-001947.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10001,,,,ApprovalsCFValue{approvals=[]},,,,{},ghx-label-8,,,,,,,dark_purple,,,,,0|i0002v:,,,,,,,,,,,,,,,,To Do,26/Aug/26 10:15 AM
+[LT-UI-CAM] Great Western Highway (Victoria Pass) live webcam feed returns operational unavailable message,LT-3,10014,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,High,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,26/Aug/26 10:33 AM,26/Aug/26 10:38 AM,26/Aug/26 10:42 AM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+* *Browser:* Google Chrome (Latest Version)
+
+h3. Prerequisites
+
+* Live Traffic Cameras layer toggled to ON.
+
+h3. Steps to Reproduce
+
+# Navigate to the Live Traffic NSW website map interface.
+# Toggle the ""Live Traffic Cameras"" option to ON.
+# Locate and click on the blue camera marker pin element at Great Western Highway (Victoria Pass).
+# Observe the media layout inside the expanded left sidebar panel drawer.
+
+h3. Expected Result
+
+The camera component handles the media stream fluidly and displays the real-time road view imagery (refreshed every 15 seconds).
+
+h3. Actual Result
+
+The webcam viewport displays an orange error message banner: ""This [http://livetraffic.com|http://livetraffic.com|smart-link]  webcam is currently unavailable for operational reasons. Please check back later.""
+
+h3. Impact / Severity
+
+* *Severity:* Medium (Functional Regression / Stream Failure)
+* *Priority:* High (Public safety feature unavailable on closed route)
+
+!image-20260826-003332.png|width=727,alt=""image-20260826-003332.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,26/Aug/26 10:33 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260826-003332.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10002,,,,ApprovalsCFValue{approvals=[]},,,,{},ghx-label-6,,,,,,,green,,,,,0|i00033:,,,,,,,,,,,,,,,,To Do,26/Aug/26 10:33 AM
+Functional Data Discrepancy: Confirmation screen indicates a 'Standard' room tier while the itinerary ledger reflects 'Super Deluxe',AHA-14,10104,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:29 PM,28/Sep/26 12:29 PM,28/Sep/26 12:29 PM,,,0,"Status: Failed
+
+Description:
+Cross-module data corruption discrepancy. Core data keys transform dynamically depending on the active interface viewport or view dashboard loaded.
+
+Steps to Reproduce:
+1. Choose a 'Super Deluxe' room option during initial hotel searches
+2. Complete checkout actions to trigger confirmation sheets
+3. Verify and record the text printed under 'Room Type' on the booking confirmation layout
+4. Jump immediately over to the active Booked Itinerary dashboard log table grid and compare row items
+
+Expected Result:
+Room attributes must remain uniform across all page modules ('Super Deluxe' must persist on both views).
+
+Actual Result:
+The checkout confirmation screen lists a 'Standard' layout designation while the live itinerary tracking table logs a completely separate 'Super Deluxe' string attribute.
+
+!image-20260928-022920.png|width=331,alt=""image-20260928-022920.png""!
+
+!image-20260928-022914.png|width=456,alt=""image-20260928-022914.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:29 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-022914.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10093,28/Sep/26 12:29 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-022920.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10092,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0008q:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:29 PM
+System overrides user configuration and automatically forces 'Standard' room tier layout to 'Deluxe',AHA-8,10098,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:16 PM,28/Sep/26 12:16 PM,28/Sep/26 12:16 PM,,,0,"Status: Failed
+
+Description:
+State mapping bug. Processing the confirmation layout step mutates specific user parameters behind the scenes.
+
+Steps to Reproduce:
+1. Choose a 'Standard' room tier setup during the search criteria configuration steps
+2. Complete the personal info checkout pages and hit submit
+3. Review the confirmed 'Room Type' value output printed on the final transaction receipt
+
+Expected Result:
+The application must preserve configuration preferences, carrying the selected 'Standard' room tier safely to the final step.
+
+Actual Result:
+The room category property is altered automatically to 'Deluxe' on final screens, overriding the user's explicit selection.
+
+!image-20260928-021646.png|width=352,alt=""image-20260928-021646.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:16 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-021646.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10086,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0007e:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:16 PM
+Checkout processing completely drops the user's input string from the Last Name confirmation text fields,AHA-7,10097,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:14 PM,28/Sep/26 12:14 PM,28/Sep/26 12:14 PM,,,0,"Status: Failed
+
+Description:
+Data integration failure. Text values submitted into checkout profile input forms vanish from downstream confirmation matrices.
+
+Steps to Reproduce:
+1. Navigate to the Book Hotel module checkout form layout
+2. Complete all input areas, explicitly typing 'ramesh' into the Last Name block
+3. Execute the transaction via the 'Book Now' execution option
+4. Review customer details printed on the final booking summary ledger
+
+Expected Result:
+The application must maintain structural data consistency; the submitted Last Name must display on the confirmation page summary.
+
+Actual Result:
+The Last Name value is completely missing from the confirmation layout output screen.
+
+!image-20260928-021432.png|width=350,alt=""image-20260928-021432.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:14 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-021432.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10085,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i00076:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:14 PM
+Unexplained $10 premium added to the subtotal pricing calculation matrix on the search results screen,AHA-6,10096,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:10 PM,28/Sep/26 12:10 PM,28/Sep/26 12:10 PM,,,0,"Status: Failed
+
+Description:
+Pricing formula error. The search table grid loads an inaccurate calculation matrix on individual night rows.
+
+Steps to Reproduce:
+1. Note down the base 'Price per Night' for a selected property (e.g., Hotel Cornice = $100)
+2. Select a check-in and check-out window spanning exactly 1 day
+3. Evaluate the 'Total Price (excl. GST)' column calculation text
+
+Expected Result:
+The displayed subtotal must equal base rate multiplied by days ($100 * 1 day = $100) with zero arbitrary fees.
+
+Actual Result:
+The 'Total Price (excl. GST)' column displays an incorrect total of $110, introducing an unexplained $10 arithmetic premium error.
+
+!image-20260928-021014.png|width=344,alt=""image-20260928-021014.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:10 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-021014.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10084,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0006y:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:10 PM
+"Search Hotel reset button fails to clear room counts, attendee counters, and selected booking dates",AHA-5,10095,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:07 PM,28/Sep/26 12:07 PM,28/Sep/26 12:07 PM,,,0,"Status: Failed
+
+Description:
+Form clear failure. The functional 'Reset' button does not wipe active selection properties across dropdown arrays and date pickers.
+
+Steps to Reproduce:
+1. Navigate to the Search Hotel page module
+2. Input custom selections across all dropdown slots and calendar pickers
+3. Click the 'Reset' button component
+
+Expected Result:
+All selected values, dates, counters, and dropdown fields must clear completely back to null or baseline system default parameters.
+
+Actual Result:
+The reset operation fails for the fields: number of rooms, check-in date, check-out date, and adults per room.
+
+!image-20260928-020708.png|width=242,alt=""image-20260928-020708.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:07 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-020708.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10083,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0006q:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:07 PM
+System forces idle redirect to login layout without displaying a 'session expired' notification message,AHA-4,10094,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 11:58 AM,28/Sep/26 11:58 AM,28/Sep/26 11:58 AM,,,0,"Status: Failed
+
+Description:
+Session management notification issue. When an idle session timeout threshold is hit, the application drops the active session without warning the user.
+
+Steps to Reproduce:
+1. Log into the system application
+2. Stay entirely idle without performing actions for the defined timeout period (30 minutes)
+3. Attempt to interact with or refresh the page grid
+
+Expected Result:
+The user should be automatically logged out, returned to the login screen, and shown an explicit alert stating ""session expired, please login again"".
+
+Actual Result:
+The system signs the user out but displays no notification message; the page automatically redirects straight to a blank login screen without explanation.
+
+!image-20260928-015825.png|width=283,alt=""image-20260928-015825.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 11:58 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-015825.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10082,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0006i:,,,,,,,,,,,,,,,,To Do,28/Sep/26 11:58 AM
+Browser back-button navigation from search hotel page triggers ERR_CACHE_MISS form resubmission crash,AHA-3,10093,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 11:54 AM,28/Sep/26 11:55 AM,28/Sep/26 12:10 PM,,,0,"Status: Failed
+
+Description:
+Navigation cache exception. Initiating browser-level back navigation triggers an unhandled browser form resubmission dialogue screen.
+
+Steps to Reproduce:
+1. Log into the application successfully
+2. Navigate to the Search Hotel module page
+3. Click the browser's native back arrow navigation button
+
+Expected Result:
+The user safely reaches the previous page smoothly without encountering cache transmission errors or form handling crashes.
+
+Actual Result:
+The page crashes and shows a raw browser error message: ""Confirm Form Resubmission (ERR_CACHE_MISS)"".
+
+!image-20260928-015505.png|width=271,alt=""image-20260928-015505.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 11:55 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-015505.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10081,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0006a:,,,,,,,,,,,,,,,,To Do,28/Sep/26 11:54 AM
+[LT-UI-VAL] Trips panel removes submission buttons and fails to show error messages for unreachable international routes,LT-12,10023,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,27/Aug/26 11:07 AM,27/Aug/26 11:07 AM,27/Aug/26 11:07 AM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+
+h3. Steps to Reproduce
+
+# Open the 'Trips / Plan Journey' routing panel drawer.
+# Enter a local coordinate (e.g., ""Epping NSW, Australia"") in the Origin text field.
+# Enter an overseas, unmappable destination (e.g., ""London, UK"") in the Destination text field.
+# Attempt to trigger the route calculation process.
+
+h3. Expected Result
+
+The routing engine flags the unmappable transit pathway, preserves the form state, and presents a clear error warning notice reading: ""Unable to calculate a route between these locations.""
+
+h3. Actual Result
+
+No validation notice displays. The interface layout breaks completely, stripping and hiding the routing calculation action button controls from the sidebar drawer view.
+
+h3. Impact / Severity
+
+* *Severity:* Medium (UI Layout Break / Geocoding Error Handling)
+* *Priority:* Medium
+!image-20260827-010729.png|width=703,alt=""image-20260827-010729.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,27/Aug/26 11:07 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260827-010729.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10011,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i00053:,,,,,,,,,,,,,,,,To Do,27/Aug/26 11:07 AM
+[LT-UI-VAL] Trips engine calculates full route and metrics when identical Origin and Destination locations are selected,LT-11,10022,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,27/Aug/26 11:03 AM,27/Aug/26 11:03 AM,27/Aug/26 11:03 AM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+
+h3. Steps to Reproduce
+
+# Open the 'Trips / Plan Journey' routing panel drawer.
+# Select ""Epping NSW, Australia"" as the Origin.
+# Select the exact same ""Epping NSW, Australia"" location as the Destination.
+# Trigger the route calculation.
+
+h3. Expected Result
+
+The input processing matrix blocks execution and generates an inline validation flag error message reading: ""Origin and Destination cannot be the exact same location.""
+
+h3. Actual Result
+
+The engine processes the loop blindly. No error warning displays; instead, it outputs an impossible travel summary metric (""23.8 km via M2 and M1"") for identical endpoints.
+
+h3. Impact / Severity
+
+* *Severity:* Medium (Business Logic / Validation Defect)
+* *Priority:* Medium
+!image-20260827-010340.png|width=703,alt=""image-20260827-010340.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,27/Aug/26 11:03 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260827-010340.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10010,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0004v:,,,,,,,,,,,,,,,,To Do,27/Aug/26 11:03 AM
+[LT-UI-VAL] Trips routing panel collapses and removes submission buttons when processing long overflow strings (>500 characters),LT-9,10020,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,26/Aug/26 11:45 AM,26/Aug/26 11:45 AM,26/Aug/26 9:02 PM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+
+h3. Steps to Reproduce
+
+# Open the 'Trips / Plan Journey' routing panel drawer.
+# Paste an extremely long text string (over 500+ repeating characters) into both the Origin and Destination text containers.
+# Remove focus from the inputs and check the action button container layout area.
+
+h3. Expected Result
+
+The input box safely truncates the string at a predefined character limit, stops accepting new keystrokes, and keeps the route calculation buttons functional.
+
+h3. Actual Result
+
+No string limit or boundary validation is enforced. The application layout drops its structural state, completely hiding all routing submission and calculation buttons from the panel view.
+
+h3. Impact / Severity
+
+* *Severity:* Medium (Input Buffer Failure / UI Component Break)
+* *Priority:* Medium
+!image-20260826-014517.png|width=703,alt=""image-20260826-014517.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,26/Aug/26 11:45 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260826-014517.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10008,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0004f:,,,,,,,,,,,,,,,,To Do,26/Aug/26 11:45 AM
+[LT-UI-VAL] Trips panel completely hides routing submission buttons when a mandatory field is left empty,LT-8,10019,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,26/Aug/26 11:33 AM,26/Aug/26 11:33 AM,26/Aug/26 11:33 AM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+* *Browser:* Google Chrome (Latest Version)
+
+h3. Prerequisites
+
+* User is on the 'Trips / Plan Journey' routing panel drawer menu.
+
+h3. Steps to Reproduce
+
+# Open the 'Trips' navigation tab on the left sidebar menu layout.
+# Leave the primary 'Origin' departure field completely empty.
+# Type a valid address (e.g., ""Wollongong NSW, Australia"") into the 'Destination' field box.
+# Remove your cursor focus from the text inputs and observe the form action area.
+
+h3. Expected Result
+
+The application blocks the search execution process and displays a clear red mandatory field inline validation error text indicator next to the empty origin box to guide the user.
+
+h3. Actual Result
+
+No error indications are rendered. The application layout drops its structural state, completely stripping and hiding the ""Get Directions"" / ""Calculate Route"" routing calculation action buttons from the panel layout view.
+
+h3. Impact / Severity
+
+* *Severity:* Medium (Form Control / UI Validation Failure)
+* *Priority:* Medium
+!image-20260826-013313.png|width=703,alt=""image-20260826-013313.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,26/Aug/26 11:33 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260826-013313.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10007,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i00047:,,,,,,,,,,,,,,,,To Do,26/Aug/26 11:33 AM
+[LT-UI-VAL] Trips panel completely hides routing submission buttons when a mandatory field is left empty,LT-7,10018,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,26/Aug/26 11:26 AM,26/Aug/26 11:26 AM,26/Aug/26 11:26 AM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+
+h3. Steps to Reproduce
+
+# Open the 'Trips / Plan Journey' routing panel drawer.
+# Leave the Origin field completely blank.
+# Type a valid address (e.g., ""Wollongong NSW, Australia"") into the Destination field.
+# Remove focus from the inputs and check for submission buttons.
+
+h3. Expected Result
+
+The system blocks the route calculation process, flags the empty box layout, and displays a clear red mandatory field inline validation error text indicator.
+
+h3. Actual Result
+
+No error indications are rendered. The application layout drops its structural state, completely hiding all route calculation action buttons from the panel view.
+
+h3. Impact / Severity
+
+* *Severity:* Medium (Form Control / UI Validation Failure)
+* *Priority:* Medium
+!image-20260826-012628.png|width=703,alt=""image-20260826-012628.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,26/Aug/26 11:26 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260826-012628.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10006,,,,ApprovalsCFValue{approvals=[]},,,,{},ghx-label-5,,,,,,,dark_teal,,,,,0|i0003z:,,,,,,,,,,,,,,,,To Do,26/Aug/26 11:26 AM
+[LT-UI-VAL] Trips routing fields hide all action buttons when invalid special characters (_#@!*$) are input,LT-6,10017,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,26/Aug/26 11:17 AM,26/Aug/26 11:17 AM,26/Aug/26 11:17 AM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+
+h3. Steps to Reproduce
+
+# Open the 'Trips / Plan Journey' routing panel drawer.
+# Type a string of special characters: {{_#@!*$}} into the Origin and Destination fields.
+# Remove focus from the input text containers.
+
+h3. Expected Result
+
+The input field blocks submission and loads an empty-state fallback warning text reading: ""No results found. Please check your spelling or try another location.""
+
+h3. Actual Result
+
+The layout collapses entirely. No inline errors are loaded, and the ""Get Directions"" / ""Calculate Route"" button containers are completely hidden from view.
+
+h3. Impact / Severity
+
+* *Severity:* Medium (UI Layout Break / Input Handling)
+* *Priority:* Medium
+!image-20260826-011720.png|width=703,alt=""image-20260826-011720.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,26/Aug/26 11:17 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260826-011720.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10005,,,,ApprovalsCFValue{approvals=[]},,,,{},ghx-label-3,,,,,,,yellow,,,,,0|i0003r:,,,,,,,,,,,,,,,,To Do,26/Aug/26 11:17 AM
+Trips input fields accept invalid special characters and fail to display input validation errors,LT-1,10012,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Medium,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,25/Aug/26 10:56 AM,25/Aug/26 11:48 AM,26/Aug/26 11:22 AM,,,0,"_Bug Summary:_
+The location input fields under the ""Trips"" panel accept completely invalid strings containing only punctuation and special characters without triggering any user input validation errors or clearing out the entry fields.
+
+_Steps to Reproduce:_
+
+# Open a desktop web browser and navigate to the Live Traffic NSW site ([http://livetraffic.com|http://livetraffic.com|smart-link] ).
+# Click the ""Trips"" navigation tab on the left-hand panel menu.
+# In the first location text entry field, type the special character string: / , . . . .
+# In the second destination text entry field, type the special character string: , / /
+# Observe how the application handles the input.
+
+_Expected Result:_
+The application should validate the address input strings. It should show a clear validation error message (e.g., ""Please enter a valid address or location"") and block the user from trying to search with raw special characters.
+
+_Actual Result:_
+The application accepts the strings completely, leaving the raw characters permanently visible inside the fields with no validation alerts displayed to help the user.
+
+!image-20260825-014746.png|width=591,alt=""image-20260825-014746.png""!","URL: [https://livetraffic.com|https://livetraffic.com|smart-link] 
+OS: Windows 11 (64-bit)
+Browser: Google Chrome (Latest Version)
+Device: Desktop PC Layout",pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,25/Aug/26 11:48 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260825-014746.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10000,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0002n:,,,,,,,,,,,,,,,,To Do,25/Aug/26 10:56 AM
+The 'Room Type' descriptive data column is completely missing from the horizontal itinerary overview grid,AHA-17,10107,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Low,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 12:35 PM,28/Sep/26 2:01 PM,28/Sep/26 12:35 PM,,,0,"Status: Failed
+
+Description:
+Interface configuration drop. The summary tables on the central user itinerary control views are missing a core descriptive data column header.
+
+Steps to Reproduce:
+1. Click on the central 'Booked Itinerary' tab option along the master navigation header panels
+2. Audit the horizontal headers layout grid of the master orders display table
+3. Check for specific descriptive text fields marking selected room tiers (e.g., 'Deluxe')
+
+Expected Result:
+A dedicated, styled ""Room Type"" data column header must be visible and populate with the correct tier attribute for each active row item.
+
+Actual Result:
+The horizontal layout column header for room types is completely missing from the table structure, leaving row properties blank and unreadable.
+
+!image-20260928-023537.png|width=545,alt=""image-20260928-023537.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 12:35 PM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-023537.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10096,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0009e:,,,,,,,,,,,,,,,,To Do,28/Sep/26 12:35 PM
+Missing password visibility toggle (eye icon) on the change password management screen,AHA-2,10092,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Low,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 11:50 AM,28/Sep/26 1:59 PM,28/Sep/26 11:51 AM,,,0,"Status: Failed
+
+Description:
+Usability defect on the password management form layout. The input fields lack a masking toggle visibility control element.
+
+Steps to Reproduce:
+1. Navigate to the change password form layout
+2. Enter password strings into the current, new, and confirm password fields
+3. Observe the presence of an eye icon or show-password toggle symbol
+
+Expected Result:
+The user should be able to view or hide their password strings using an explicit eye icon toggle framework for user verification.
+
+Actual Result:
+The eye icon is completely missing from the page. The field does not reveal the data, preventing users from validating masked keyboard inputs.
+
+!image-20260928-015033.png|width=260,alt=""image-20260928-015033.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 11:50 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-015033.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10080,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i00062:,,,,,,,,,,,,,,,,To Do,28/Sep/26 11:50 AM
+Login system accepts lowercase username inputs instead of enforcing strict case-sensitivity,AHA-1,10091,Bug,To Do,AHA,Adactin hotel application,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Low,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Sep/26 11:06 AM,28/Sep/26 1:59 PM,28/Sep/26 11:53 AM,,,0,"Status: Failed
+
+Description:
+The login authentication module fails to validate case-sensitivity on the username input field, allowing users to authenticate with non-matching string casing.
+
+Steps to Reproduce:
+1. Navigate to [https://adactinhotelapp.com|https://adactinhotelapp.com/]
+2. Enter username in all lowercase characters ('pavithraramesh')
+3. Enter the valid, matching password ('Hotel@123')
+4. Click the Login button
+
+Expected Result:
+The user should not be able to log in successfully; the application must enforce strict username case-sensitivity constraints and throw a validation warning.
+
+Actual Result:
+User is successfully logged in and redirected to the Search Hotel page without an error message.
+
+!image-20260928-010644.png|width=194,alt=""image-20260928-010644.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Sep/26 11:06 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260928-010644.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10079,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0005u:,,,,,,,,,,,,,,,,To Do,28/Sep/26 11:06 AM
+"[LT-UI-SHARE] Outdated sharing test script; no ""Share"" or ""Copy Link"" button elements exist in incident detail panels",LT-14,10025,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Low,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,28/Aug/26 10:55 AM,28/Aug/26 10:55 AM,28/Aug/26 10:55 AM,,,0,"h3. Environment
+
+* *URL:* [https://www.livetraffic.com/|https://www.livetraffic.com/|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+
+h3. Steps to Reproduce
+
+# Open any active incident detail card (e.g., ""CRASH B-triple"" on Kidman Way).
+# Scan the information panel container for a native ""Share"" or ""Copy Link"" button element.
+
+h3. Expected Result
+
+The test case expects a native share action link or button to capture the unique URL layout.
+
+h3. Actual Result
+
+No interactive share button or link asset is present inside the incident details viewport panel. Sharing requires manually extracting the URL from the browser's address bar.
+
+h3. Impact / Severity
+
+* *Severity:* Low (Test Script Refactoring Required)
+* *Priority:* Low
+!image-20260828-005453.png|width=703,alt=""image-20260828-005453.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,28/Aug/26 10:55 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260828-005453.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10013,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0005j:,,,,,,,,,,,,,,,,To Do,28/Aug/26 10:55 AM
+[LT-UI-AUTH] Outdated authentication test script; no Login/Logout button controls exist on Live Traffic web application,LT-13,10024,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Low,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,27/Aug/26 11:16 AM,27/Aug/26 11:16 AM,27/Aug/26 11:25 AM,,,0,"h3. Environment
+
+* *URL:* [https://www.livetraffic.com/|https://www.livetraffic.com/|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+
+h3. Steps to Reproduce
+
+# Load the Live Traffic NSW homepage.
+# Attempt to locate a ""Login"", ""Logout"", or user account authentication profile menu interface element.
+
+h3. Expected Result
+
+The test script expects an active user session state with accessible ""Logout"" button controls.
+
+h3. Actual Result
+
+No authentication layer or login/logout UI elements exist on the web platform layout. The app operates strictly as an unauthenticated open public utility portal.
+
+h3. Impact / Severity
+
+* *Severity:* Low (Test Script Refactoring Required)
+* *Priority:* Low
+
+!image-20260827-011613.png|width=727,alt=""image-20260827-011613.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,27/Aug/26 11:16 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260827-011613.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10012,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0005b:,,,,,,,,,,,,,,,,To Do,27/Aug/26 11:16 AM
+"[LT-UI-TRIPS] Missing ""Save Route to Favorites"" star icon and favorites folder layout in Trips drawer",LT-10,10021,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Low,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,27/Aug/26 11:00 AM,27/Aug/26 11:00 AM,27/Aug/26 11:00 AM,,,0,"h3. Environment
+
+* *URL:* [https://livetraffic.com|https://livetraffic.com|smart-link] 
+* *Device / OS:* Desktop (Windows 11 / macOS)
+
+h3. Steps to Reproduce
+
+# Generate an active route from 'Epping NSW' to 'Sydney CBD, NSW'.
+# Attempt to locate a ""star icon"" or ""Save Route to Favorites"" control layout element.
+
+h3. Expected Result
+
+A profile save control or star icon is visible to cache the journey profile into local storage files.
+
+h3. Actual Result
+
+No favorite selection controls or star icons exist inside the sidebar panel structure or map viewport canvas.
+
+h3. Impact / Severity
+
+* *Severity:* Low (Feature Discrepancy / Outdated Script Criteria)
+* *Priority:* Low
+!image-20260827-010000.png|width=703,alt=""image-20260827-010000.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,27/Aug/26 11:00 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260827-010000.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10009,,,,ApprovalsCFValue{approvals=[]},,,,{},,,,,,,,,,,,,0|i0004n:,,,,,,,,,,,,,,,,To Do,27/Aug/26 11:00 AM
+"[LT-UI-CAM] Missing ""Live Video / Stream"" tab control button in traffic camera sidebar",LT-4,10015,Bug,To Do,LT,Live traffic,software,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,Low,,,,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,26/Aug/26 10:50 AM,26/Aug/26 10:55 AM,26/Aug/26 10:55 AM,,,0,"h3. Steps to Reproduce
+
+# Toggle ""Live Traffic Cameras"" active.
+# Click the Carlingford Road blue camera icon marker.
+# Attempt to locate the ""Live Video / Stream"" tab control button.
+
+h3. Expected Result
+
+""Live Video / Stream"" tab control button is visible to transition to a running live video stream.
+
+h3. Actual Result
+
+No tab control exists. The UI states ""New images are uploaded every 15 seconds,"" indicating only static snapshots are supported.
+
+!image-20260826-004938.png|width=727,alt=""image-20260826-004938.png""!",,pavithra ramesh,712020:bd3acc6e-796f-4b90-8c04-2eacbcb13884,,,,,,,,,26/Aug/26 10:50 AM;27a75f28-6f9a-4d8a-ac5a-f9b5e22f54a9;image-20260826-004938.png;https://adactin-team-jlf2po32.atlassian.net/rest/api/3/attachment/content/10003,,,,ApprovalsCFValue{approvals=[]},,,,{},ghx-label-14,,,,,,,dark_orange,,,,,0|i0003b:,,,,,,,,,,,,,,,,To Do,26/Aug/26 10:50 AM
