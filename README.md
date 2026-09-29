@@ -36,6 +36,13 @@ This repository houses the complete documentation matrix for the **Adactin Hotel
 | **TC_006** | Booked Itinerary Logs | ❌ **Failed** | 🟠 High | `AHA-18` | Billing Engine Arithmetic Error: Multi-room itinerary total registers an invalid \$314 charge instead of the true \$1,815 calculation summary |
 
 ---
+📁 Adactin-Hotel-QA-Documentation-Stack
+ ├── 📄 Adactin_TestRail_Cases_Export.xlsx             <-- NEW NATIVE TESTRAIL SUITE EXPORT
+ ├── 📄 Adactin_Functional_Regression_Run_Report.pdf   <-- NEW EXECUTION RESULTS CHART (PDF)
+ ├── 📄 Adactin_Suite_Backup.xml                       <-- NEW XML METADATA DATA BACKUP
+ ├── 📄 Adactin_Hotel_Master_Test_Suite.xlsx           
+ ├── 📄 Jira_AHA_Defect_Export.csv                     
+ └── 📄 README.md                                      
 
 ## 📂 Structural Directory & Repository Assets
 * `Adactin_Hotel_Master_Test_Suite.xlsx`: Main user validation verification workbook containing full precondition metadata, manual step directives, and traceability linkage IDs.
