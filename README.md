@@ -1,14 +1,14 @@
 # Adactin Hotel Booking Web Application - End-to-End QA Testing Portfolio
 
 ## Project Context & Objectives
-This repository houses the complete documentation matrix for the **Adactin Hotel Application** manual regression cycle. This framework tracks requirements verification from base-level test configurations directly down to integrated tracking metrics, logging functional glitches, calculations defects, boundary constraint failures, and system vulnerabilities.
+This repository houses the complete quality assurance documentation matrix for the **Adactin Hotel Application** manual regression cycle. This framework tracks requirements verification from native tool test suite configurations directly down to integrated tracking metrics, logging functional glitches, calculation defects, boundary constraint failures, system vulnerabilities, and official reporting outputs.
 
 ---
 
 ## 🛠️ Integrated Tooling Stack
-* **Test Case Layout Framework:** Configured uniformly using Single-Row structural text parameter groupings across 4 core business application folders.
-* **Bug Tracking & Triage Platform:** Managed via Atlassian **Jira Cloud** under the tracking project key sequence: **`AHA-XXX`**.
-* **Defect Priority Classification:** Set via clear business logic dependencies separating low-priority visual bugs from blocker-status accounting calculations failure anomalies.
+* **Test Case Layout Framework:** Configured and managed natively using Single-Row structural text parameter blocks inside **TestRail Enterprise**.
+* **Bug Tracking & Triage Platform:** Synchronized, triaged, and tracked via Atlassian **Jira Cloud** under the project key sequence: **`AHA-XXX`**.
+* **Defect Priority Classification:** Filtered via clear business logic parameters separating low-priority cosmetic assets from blocker-status accounting calculation anomalies and raw syntax database exposures.
 
 ---
 
@@ -36,18 +36,26 @@ This repository houses the complete documentation matrix for the **Adactin Hotel
 | **TC_006** | Booked Itinerary Logs | ❌ **Failed** | 🟠 High | `AHA-18` | Billing Engine Arithmetic Error: Multi-room itinerary total registers an invalid \$314 charge instead of the true \$1,815 calculation summary |
 
 ---
-📁 Adactin-Hotel-QA-Documentation-Stack
- ├── 📄 Adactin_TestRail_Cases_Export.xlsx             <-- NEW NATIVE TESTRAIL SUITE EXPORT
- ├── 📄 Adactin_Functional_Regression_Run_Report.pdf   <-- NEW EXECUTION RESULTS CHART (PDF)
- ├── 📄 Adactin_Suite_Backup.xml                       <-- NEW XML METADATA DATA BACKUP
- ├── 📄 Adactin_Hotel_Master_Test_Suite.xlsx           
- ├── 📄 Jira_AHA_Defect_Export.csv                     
- └── 📄 README.md                                      
 
-## 📂 Structural Directory & Repository Assets
-* `Adactin_Hotel_Master_Test_Suite.xlsx`: Main user validation verification workbook containing full precondition metadata, manual step directives, and traceability linkage IDs.
-* `Jira_AHA_Defect_Export.csv`: Direct structural issue fields data snapshot export downloaded from Atlassian Jira software, holding environmental settings parameters, step logs, and development notes.
+## 📂 Repository Contents & QA Artifact Definitions
+
+```text
+📁 Adactin-Hotel-QA-Documentation-Stack
+ ├── 📄 Adactin_TestRail_Cases_Export.xlsx             <--- Native TestRail Suite Export
+ ├── 📄 Adactin_Functional_Regression_Run_Report.pdf   <--- Execution Results Summary (PDF)
+ ├── 📄 Adactin_Suite_Backup.xml                       <--- Native TestRail XML Backup
+ ├── 📄 Adactin_Hotel_Master_Test_Suite.xlsx           <--- Manual Excel Matrix
+ ├── 📄 Jira_AHA_Defect_Export.csv                     <--- Jira Issue Log Export
+ └── 📄 README.md                                      <--- Dashboard Page
+```
+
+### 📋 QA Asset Descriptions
+* **`Adactin_Functional_Regression_Run_Report.pdf`**: Live testing summary report exported from the TestRail execution dashboard engine. Holds visual pass/fail graphs, execution completion logs, and targeted environment metrics.
+* **`Adactin_TestRail_Cases_Export.xlsx`**: Native spreadsheet library backup file generated directly from the TestRail suite manager. Holds isolated execution preconditions and step-by-step verification flows.
+* **`Adactin_Suite_Backup.xml`**: Structural XML portability backup log document allowing the entire Adactin test suite layout repository to be migrated cleanly between industry ALM environments.
+* **`Adactin_Hotel_Master_Test_Suite.xlsx`**: Core manual verification planning document, tracking cross-functional system testing requirements and downstream integration metrics keys.
+* **`Jira_AHA_Defect_Export.csv`**: Issue data catalog snapshot exported directly from Atlassian Jira Cloud software. Preserves structural environment setup parameters, step-by-step replication sequences, assigned developer properties, and triage status indicators under project key **AHA**.
 
 ---
-**Portfolio By:** Pavithra Ramesh  
-**Role:** Quality Assurance Engineer  
+**Portfolio Maintained By:** Pavithra Ramesh  
+**Professional Role:** Quality Assurance Engineer  
